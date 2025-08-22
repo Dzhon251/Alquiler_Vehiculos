@@ -1,4 +1,4 @@
-﻿@model Alquiler_Vehiculos.Models.Vehiculos
+﻿@model Alquiler_Vehiculos.Models.Entity.VehiculoModel
 
 @{
     ViewData["Title"] = "Details";
@@ -8,7 +8,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Vehiculos</h4>
+    <h4>VehiculoModel</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -35,9 +35,27 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Disponible)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Create_At)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Create_At)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Update_At)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Update_At)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.isDelete)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.isDelete)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Vehiculo_Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

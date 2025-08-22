@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Alquiler_Vehiculos.Models.Entity.Base;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Alquiler_Vehiculos.Models
+namespace Alquiler_Vehiculos.Models.Entity
 {
-    public class Vehiculos
+    [Table("Vehiculos")]
+    public class VehiculoModel:BaseModel
     {
-        [Key]
-        public int Vehiculo_Id { get; set; }
         [Required(ErrorMessage = "El campo es requerido")]
         public string Marca { get; set; }
         [Required(ErrorMessage = "El campo es requerido")]

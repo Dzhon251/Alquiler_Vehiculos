@@ -6,26 +6,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Alquiler_Vehiculos.Data;
-using Alquiler_Vehiculos.Models;
+using Alquiler_Vehiculos.Models.Entity;
 
 namespace Alquiler_Vehiculos.Controllers
 {
-    public class ClientesController : Controller
+    public class AlquiladosModelController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ClientesController(ApplicationDbContext context)
+        public AlquiladosModelController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Clientes
+        // GET: AlquiladosModel
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Clientes.ToListAsync());
+            var applicationDbContext = _context.Alquilados.Include(a => a.ClientesModel);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Clientes/Details/5
+        // GET: AlquiladosModel/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +34,42 @@ namespace Alquiler_Vehiculos.Controllers
                 return NotFound();
             }
 
-            var clientes = await _context.Clientes
+            var alquilerModel = await _context.Alquilados
+                .Include(a => a.ClientesModel)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (clientes == null)
+            if (alquilerModel == null)
             {
                 return NotFound();
             }
 
-            return View(clientes);
+            return View(alquilerModel);
         }
 
-        // GET: Clientes/Create
+        // GET: AlquiladosModel/Create
         public IActionResult Create()
         {
+            ViewData["ClienteModelId"] = new SelectList(_context.Clientes, "Id", "Apellido");
             return View();
         }
 
-        // POST: Clientes/Create
+        // POST: AlquiladosModel/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,Licencia,Telefono")] Clientes clientes)
+        public async Task<IActionResult> Create([Bind("FechaAlquiler,Codigo_Alquiler,Total_Alquiler,ClienteModelId,Id,Create_At,Update_At,isDelete")] AlquilerModel alquilerModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(clientes);
+                _context.Add(alquilerModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientes);
+            ViewData["ClienteModelId"] = new SelectList(_context.Clientes, "Id", "Apellido", alquilerModel.ClienteModelId);
+            return View(alquilerModel);
         }
 
-        // GET: Clientes/Edit/5
+        // GET: AlquiladosModel/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +77,23 @@ namespace Alquiler_Vehiculos.Controllers
                 return NotFound();
             }
 
-            var clientes = await _context.Clientes.FindAsync(id);
-            if (clientes == null)
+            var alquilerModel = await _context.Alquilados.FindAsync(id);
+            if (alquilerModel == null)
             {
                 return NotFound();
             }
-            return View(clientes);
+            ViewData["ClienteModelId"] = new SelectList(_context.Clientes, "Id", "Apellido", alquilerModel.ClienteModelId);
+            return View(alquilerModel);
         }
 
-        // POST: Clientes/Edit/5
+        // POST: AlquiladosModel/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Apellido,Licencia,Telefono")] Clientes clientes)
+        public async Task<IActionResult> Edit(int id, [Bind("FechaAlquiler,Codigo_Alquiler,Total_Alquiler,ClienteModelId,Id,Create_At,Update_At,isDelete")] AlquilerModel alquilerModel)
         {
-            if (id != clientes.Id)
+            if (id != alquilerModel.Id)
             {
                 return NotFound();
             }
@@ -97,12 +102,12 @@ namespace Alquiler_Vehiculos.Controllers
             {
                 try
                 {
-                    _context.Update(clientes);
+                    _context.Update(alquilerModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientesExists(clientes.Id))
+                    if (!AlquilerModelExists(alquilerModel.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +118,11 @@ namespace Alquiler_Vehiculos.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientes);
+            ViewData["ClienteModelId"] = new SelectList(_context.Clientes, "Id", "Apellido", alquilerModel.ClienteModelId);
+            return View(alquilerModel);
         }
 
-        // GET: Clientes/Delete/5
+        // GET: AlquiladosModel/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +130,35 @@ namespace Alquiler_Vehiculos.Controllers
                 return NotFound();
             }
 
-            var clientes = await _context.Clientes
+            var alquilerModel = await _context.Alquilados
+                .Include(a => a.ClientesModel)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (clientes == null)
+            if (alquilerModel == null)
             {
                 return NotFound();
             }
 
-            return View(clientes);
+            return View(alquilerModel);
         }
 
-        // POST: Clientes/Delete/5
+        // POST: AlquiladosModel/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var clientes = await _context.Clientes.FindAsync(id);
-            if (clientes != null)
+            var alquilerModel = await _context.Alquilados.FindAsync(id);
+            if (alquilerModel != null)
             {
-                _context.Clientes.Remove(clientes);
+                _context.Alquilados.Remove(alquilerModel);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientesExists(int id)
+        private bool AlquilerModelExists(int id)
         {
-            return _context.Clientes.Any(e => e.Id == id);
+            return _context.Alquilados.Any(e => e.Id == id);
         }
     }
 }
