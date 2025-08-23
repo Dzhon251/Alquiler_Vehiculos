@@ -8,21 +8,18 @@
 <h2 class="mb-4 text-primary">Nuevo Alquiler</h2>
 
 <div class="row">
-    <div class="col-md-6">
-
+    <div class="col-md-8">
         <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-            <!-- Selección Cliente -->
             <div class="mb-3">
                 <label asp-for="ClienteModelId" class="form-label fw-bold"></label>
-                <select asp-for="ClienteModelId" class="form-select" asp-items="ViewBag.ClienteModelId" onchange="unCliente()">
+                <select asp-for="ClienteModelId" class="form-select" asp-items="ViewBag.ClienteModelId" id="ClienteModelId" onchange="unCliente()">
                     <option value="">Seleccione un Cliente</option>
                 </select>
                 <span asp-validation-for="ClienteModelId" class="text-danger"></span>
             </div>
 
-            <!-- Datos Cliente -->
             <div class="mb-3">
                 <label class="form-label fw-bold">Licencia</label>
                 <input id="Licencia" class="form-control" readonly />
@@ -32,7 +29,6 @@
                 <input id="Telefono" class="form-control" readonly />
             </div>
 
-            <!-- Fecha y código de alquiler -->
             <div class="mb-3">
                 <label asp-for="FechaAlquiler" class="form-label fw-bold"></label>
                 <input asp-for="FechaAlquiler" class="form-control" type="date" />
@@ -45,7 +41,6 @@
                 <span asp-validation-for="Codigo_Alquiler" class="text-danger"></span>
             </div>
 
-            <!-- Vehículos -->
             <button type="button" id="addProduct" class="btn-add mb-3"
                     data-bs-toggle="modal" data-bs-target="#modalVehiculos"
                     onclick="Lista_Vehiculos()">
@@ -73,25 +68,15 @@
                 <span asp-validation-for="Total_Alquiler" class="text-danger"></span>
             </div>
 
-            <div class="form-check mb-3">
-                <input class="form-check-input" asp-for="isDelete" />
-                <label class="form-check-label fw-bold">
-                    @Html.DisplayNameFor(model => model.isDelete)
-                </label>
-            </div>
-
             <div class="d-grid mb-3">
                 <input type="submit" value="Guardar Alquiler" class="btn btn-success btn-lg" />
             </div>
-
         </form>
 
         <a asp-action="Index" class="btn btn-outline-secondary">Volver a la lista</a>
-
     </div>
 </div>
 
-<!-- Modal Vehículos -->
 <div class="modal fade" id="modalVehiculos" tabindex="-1" aria-labelledby="modalVehiculosLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

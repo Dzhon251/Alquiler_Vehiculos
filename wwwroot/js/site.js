@@ -12,7 +12,8 @@ var Lista_Vehiculos = () => {
     $.get(`/api/VehiculosModelApi`, (listavehiculos) => {
         let html = "";
         $.each(listavehiculos, (index, vehiculo) => {
-            let precioDiario = vehiculo.Precio_Diario ?? vehiculo.precio_Diario ?? 0;
+            let precioDiario = vehiculo.Precio_Diario ?? 0;
+
             html += `<tr>
                 <td>${vehiculo.marca} ${vehiculo.modelo}</td>
                 <td>${vehiculo.anio}</td>
@@ -32,7 +33,6 @@ var Lista_Vehiculos = () => {
         $("#Lista_prodcutos").html(html);
     });
 };
-
 
 var cargarVehiculo = (btn) => {
     let id = $(btn).data("id");

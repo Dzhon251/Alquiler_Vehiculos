@@ -4,6 +4,7 @@ using Alquiler_Vehiculos.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alquiler_Vehiculos.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250823082704_cinco")]
+    partial class cinco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,7 +217,7 @@ namespace Alquiler_Vehiculos.Data.Migrations
             modelBuilder.Entity("Alquiler_Vehiculos.Models.Entity.VehiculosAlquiladosModel", b =>
                 {
                     b.HasOne("Alquiler_Vehiculos.Models.Entity.AlquilerModel", "AlquilerModel")
-                        .WithMany()
+                        .WithMany("Vehiculos_Alquilados")
                         .HasForeignKey("AlquilerModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -228,6 +231,11 @@ namespace Alquiler_Vehiculos.Data.Migrations
                     b.Navigation("AlquilerModel");
 
                     b.Navigation("VehiculoModel");
+                });
+
+            modelBuilder.Entity("Alquiler_Vehiculos.Models.Entity.AlquilerModel", b =>
+                {
+                    b.Navigation("Vehiculos_Alquilados");
                 });
 #pragma warning restore 612, 618
         }
