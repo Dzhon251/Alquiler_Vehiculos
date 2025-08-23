@@ -9,9 +9,9 @@ namespace Alquiler_Vehiculos.Models.Entity.Base
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Column(TypeName = "datetime2")]
-        public DateTime Create_At { get; set; }
+        public DateTime Create_At { get; set; } = DateTime.Now;
         [Column(TypeName = "datetime2")]
-        public DateTime Update_At { get; set; }
+        public DateTime Update_At { get; set; } = DateTime.Now;
         public bool isDelete { get; set; }
     }
 }

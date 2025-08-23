@@ -1,4 +1,29 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
 
-// Write your JavaScript code.
+var unCliente = () => {
+    var clienteId = $("#ClienteModelId").val();
+    $.get(`/api/ClientesModelApi/${clienteId}`, (uncliente) => {
+        document.getElementById("Licencia").value = uncliente.licencia;
+        document.getElementById("Telefono").value = uncliente.telefono;
+    })
+}
+
+var Lista_Vehiculos = () => {
+    $.get(`/api/VehiculosModelApi`, async (listavehiculos) => {
+        html = "";
+        $.each(listavehiculos, (index, vehiculo) => {
+            html += `<tr >
+                <td> ${vehiculo.marca} </td>
+                <td> ${vehiculo.modelo} </td>
+                <td> <input type='number' min="1" value="0" id="qty_${vehiculo.id}"/> </td>
+                <td> <button type="button"
+                data-id="${vehiculo.id}"
+                data-nombre="${vehiculo.marca}"
+                data-precio="${vehiculo.modelo}"
+                onclick="cargarvehiculos(this)"
+                class="btn-success">+</button> </td>
+            `;
+        })  
+        await $("#Lista_prodcutos").html(html)
+    })
+}

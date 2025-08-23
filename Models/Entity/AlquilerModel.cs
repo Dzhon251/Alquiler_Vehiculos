@@ -17,11 +17,15 @@ namespace Alquiler_Vehiculos.Models.Entity
         [ForeignKey("ClientesModel")]
         public int ClienteModelId { get; set; }
         public ClienteModel ClientesModel { get; set; }
-        public ICollection<VehiculosAlquiladosModel> Productos_Vendidos { get; set; }
+        [Display(Name = "VehiculoId")]
+        [ForeignKey("VehiculoModel")]
+        public int VehiculoModelId { get; set; }
+        public VehiculoModel VehiculoModel { get; set; }
+        public ICollection<VehiculosAlquiladosModel> Vehiculos_Alquilados { get; set; }
 
         public AlquilerModel()
         {
-            Productos_Vendidos = new List<VehiculosAlquiladosModel>();
+            Vehiculos_Alquilados = new List<VehiculosAlquiladosModel>();
         }
     }
 }

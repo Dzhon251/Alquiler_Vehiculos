@@ -10,23 +10,23 @@ using Alquiler_Vehiculos.Models.Entity;
 
 namespace Alquiler_Vehiculos.Controllers
 {
-    public class AlquiladosModelController : Controller
+    public class AlquilersModelController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public AlquiladosModelController(ApplicationDbContext context)
+        public AlquilersModelController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: AlquiladosModel
+        // GET: AlquilersModel
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Alquilados.Include(a => a.ClientesModel);
+            var applicationDbContext = _context.Alquilados.Include(a => a.ClientesModel).Include(a => a.VehiculoModel);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: AlquiladosModel/Details/5
+        // GET: AlquilersModel/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,6 +36,7 @@ namespace Alquiler_Vehiculos.Controllers
 
             var alquilerModel = await _context.Alquilados
                 .Include(a => a.ClientesModel)
+                .Include(a => a.VehiculoModel)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (alquilerModel == null)
             {
@@ -45,19 +46,20 @@ namespace Alquiler_Vehiculos.Controllers
             return View(alquilerModel);
         }
 
-        // GET: AlquiladosModel/Create
+        // GET: AlquilersModel/Create
         public IActionResult Create()
         {
-            ViewData["ClienteModelId"] = new SelectList(_context.Clientes, "Id", "Apellido");
+            ViewData["ClienteModelId"] = new SelectList(_context.Clientes.Select(c => new { c.Id, NombreCompleto = c.Nombre + " " + c.Apellido }), "Id", "NombreCompleto");
+            ViewData["VehiculoModelId"] = new SelectList(_context.Vehiculos.Select(v => new { v.Id, MarcaModelo = v.Marca + " " + v.Modelo }), "Id", "MarcaModelo");
             return View();
         }
 
-        // POST: AlquiladosModel/Create
+        // POST: AlquilersModel/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FechaAlquiler,Codigo_Alquiler,Total_Alquiler,ClienteModelId,Id,Create_At,Update_At,isDelete")] AlquilerModel alquilerModel)
+        public async Task<IActionResult> Create([Bind("FechaAlquiler,Codigo_Alquiler,Total_Alquiler,ClienteModelId,VehiculoModelId,Id,Create_At,Update_At,isDelete")] AlquilerModel alquilerModel)
         {
             if (ModelState.IsValid)
             {
@@ -65,11 +67,12 @@ namespace Alquiler_Vehiculos.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteModelId"] = new SelectList(_context.Clientes, "Id", "Apellido", alquilerModel.ClienteModelId);
+            ViewData["ClienteModelId"] = new SelectList(_context.Clientes.Select(c => new { c.Id, NombreCompleto = c.Nombre + " " + c.Apellido }), "Id", "NombreCompleto", alquilerModel.ClienteModelId);
+            ViewData["VehiculoModelId"] = new SelectList(_context.Vehiculos.Select(v => new { v.Id, MarcaModelo = v.Marca + " " + v.Modelo }), "Id", "MarcaModelo", alquilerModel.VehiculoModelId);
             return View(alquilerModel);
         }
 
-        // GET: AlquiladosModel/Edit/5
+        // GET: AlquilersModel/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,16 +85,17 @@ namespace Alquiler_Vehiculos.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClienteModelId"] = new SelectList(_context.Clientes, "Id", "Apellido", alquilerModel.ClienteModelId);
+            ViewData["ClienteModelId"] = new SelectList(_context.Clientes.Select(c => new { c.Id, NombreCompleto = c.Nombre + " " + c.Apellido }), "Id", "NombreCompleto", alquilerModel.ClienteModelId);
+            ViewData["VehiculoModelId"] = new SelectList(_context.Vehiculos.Select(v => new { v.Id, MarcaModelo = v.Marca + " " + v.Modelo }), "Id", "MarcaModelo", alquilerModel.VehiculoModelId);
             return View(alquilerModel);
         }
 
-        // POST: AlquiladosModel/Edit/5
+        // POST: AlquilersModel/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FechaAlquiler,Codigo_Alquiler,Total_Alquiler,ClienteModelId,Id,Create_At,Update_At,isDelete")] AlquilerModel alquilerModel)
+        public async Task<IActionResult> Edit(int id, [Bind("FechaAlquiler,Codigo_Alquiler,Total_Alquiler,ClienteModelId,VehiculoModelId,Id,Create_At,Update_At,isDelete")] AlquilerModel alquilerModel)
         {
             if (id != alquilerModel.Id)
             {
@@ -118,11 +122,12 @@ namespace Alquiler_Vehiculos.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteModelId"] = new SelectList(_context.Clientes, "Id", "Apellido", alquilerModel.ClienteModelId);
+            ViewData["ClienteModelId"] = new SelectList(_context.Clientes.Select(c => new { c.Id, NombreCompleto = c.Nombre + " " + c.Apellido }), "Id", "NombreCompleto", alquilerModel.ClienteModelId);
+            ViewData["VehiculoModelId"] = new SelectList(_context.Vehiculos.Select(v => new { v.Id, MarcaModelo = v.Marca + " " + v.Modelo }), "Id", "MarcaModelo", alquilerModel.VehiculoModelId);
             return View(alquilerModel);
         }
 
-        // GET: AlquiladosModel/Delete/5
+        // GET: AlquilersModel/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,6 +137,7 @@ namespace Alquiler_Vehiculos.Controllers
 
             var alquilerModel = await _context.Alquilados
                 .Include(a => a.ClientesModel)
+                .Include(a => a.VehiculoModel)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (alquilerModel == null)
             {
@@ -141,7 +147,7 @@ namespace Alquiler_Vehiculos.Controllers
             return View(alquilerModel);
         }
 
-        // POST: AlquiladosModel/Delete/5
+        // POST: AlquilersModel/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
