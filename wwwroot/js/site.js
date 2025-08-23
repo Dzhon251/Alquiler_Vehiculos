@@ -1,6 +1,4 @@
-﻿
-
-var unCliente = () => {
+﻿var unCliente = () => {
     var clienteId = $("#ClienteModelId").val();
     $.get(`/api/ClientesModelApi/${clienteId}`, (uncliente) => {
         document.getElementById("Licencia").value = uncliente.licencia;
@@ -10,20 +8,23 @@ var unCliente = () => {
 
 var Lista_Vehiculos = () => {
     $.get(`/api/VehiculosModelApi`, async (listavehiculos) => {
-        html = "";
+        let html = "";
         $.each(listavehiculos, (index, vehiculo) => {
-            html += `<tr >
-                <td> ${vehiculo.marca} </td>
-                <td> ${vehiculo.modelo} </td>
-                <td> <input type='number' min="1" value="0" id="qty_${vehiculo.id}"/> </td>
-                <td> <button type="button"
-                data-id="${vehiculo.id}"
-                data-nombre="${vehiculo.marca}"
-                data-precio="${vehiculo.modelo}"
-                onclick="cargarvehiculos(this)"
-                class="btn-success">+</button> </td>
-            `;
-        })  
-        await $("#Lista_prodcutos").html(html)
-    })
+            html += `<tr>
+                <td>${vehiculo.marca} ${vehiculo.modelo}</td>
+                <td>${vehiculo.anio}</td>
+                <td><input type='number' min="1" value="1" id="qty_${vehiculo.id}" class="form-control"/></td>
+                <td>${vehiculo.Precio_Diario}</td>
+                <td>
+                    <button type="button"
+                        data-id="${vehiculo.id}"
+                        data-nombre="${vehiculo.marca} ${vehiculo.modelo}"
+                        data-precio="${vehiculo.Precio_Diario}"
+                        onclick="cargarvehiculos(this)"
+                        class="btn btn-success">+</button>
+                </td>
+            </tr>`;
+        });
+        await $("#Lista_prodcutos").html(html);
+    });
 }

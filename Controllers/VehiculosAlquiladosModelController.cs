@@ -22,7 +22,7 @@ namespace Alquiler_Vehiculos.Controllers
         // GET: VehiculosAlquiladosModel
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.VehiculosAlquilados.Include(v => v.AlquilerModel).Include(v => v.VehiculosModel);
+            var applicationDbContext = _context.VehiculosAlquilados.Include(v => v.AlquilerModel).Include(v => v.VehiculoModel);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,7 +36,7 @@ namespace Alquiler_Vehiculos.Controllers
 
             var vehiculosAlquiladosModel = await _context.VehiculosAlquilados
                 .Include(v => v.AlquilerModel)
-                .Include(v => v.VehiculosModel)
+                .Include(v => v.VehiculoModel)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehiculosAlquiladosModel == null)
             {
@@ -68,7 +68,7 @@ namespace Alquiler_Vehiculos.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AlquilerModelId"] = new SelectList(_context.Alquilados, "Id", "Id", vehiculosAlquiladosModel.AlquilerModelId);
-            ViewData["VehiculosModelId"] = new SelectList(_context.Vehiculos, "Id", "Anio", vehiculosAlquiladosModel.VehiculosModelId);
+            ViewData["VehiculosModelId"] = new SelectList(_context.Vehiculos, "Id", "Anio", vehiculosAlquiladosModel.VehiculoModelId);
             return View(vehiculosAlquiladosModel);
         }
 
@@ -86,7 +86,7 @@ namespace Alquiler_Vehiculos.Controllers
                 return NotFound();
             }
             ViewData["AlquilerModelId"] = new SelectList(_context.Alquilados, "Id", "Id", vehiculosAlquiladosModel.AlquilerModelId);
-            ViewData["VehiculosModelId"] = new SelectList(_context.Vehiculos, "Id", "Anio", vehiculosAlquiladosModel.VehiculosModelId);
+            ViewData["VehiculosModelId"] = new SelectList(_context.Vehiculos, "Id", "Anio", vehiculosAlquiladosModel.VehiculoModelId);
             return View(vehiculosAlquiladosModel);
         }
 
@@ -123,7 +123,7 @@ namespace Alquiler_Vehiculos.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AlquilerModelId"] = new SelectList(_context.Alquilados, "Id", "Id", vehiculosAlquiladosModel.AlquilerModelId);
-            ViewData["VehiculosModelId"] = new SelectList(_context.Vehiculos, "Id", "Anio", vehiculosAlquiladosModel.VehiculosModelId);
+            ViewData["VehiculosModelId"] = new SelectList(_context.Vehiculos, "Id", "Anio", vehiculosAlquiladosModel.VehiculoModelId);
             return View(vehiculosAlquiladosModel);
         }
 
@@ -137,7 +137,7 @@ namespace Alquiler_Vehiculos.Controllers
 
             var vehiculosAlquiladosModel = await _context.VehiculosAlquilados
                 .Include(v => v.AlquilerModel)
-                .Include(v => v.VehiculosModel)
+                .Include(v => v.VehiculoModel)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehiculosAlquiladosModel == null)
             {
