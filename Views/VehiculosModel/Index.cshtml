@@ -8,10 +8,10 @@
 <h1>Index</h1>
 
 <p>
-    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New</a>
 </p>
-<table class="table table-bordered table-striped table-responsive">
-    <thead class="table-dark">
+<table class="table">
+    <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Marca)
@@ -24,6 +24,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Disponible)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Precio_Diario)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Create_At)
@@ -53,6 +56,9 @@
                 @Html.DisplayFor(modelItem => item.Disponible)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Precio_Diario)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Create_At)
             </td>
             <td>
@@ -62,9 +68,9 @@
                 @Html.DisplayFor(modelItem => item.isDelete)
             </td>
             <td>
-                    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

@@ -55,14 +55,21 @@ namespace Alquiler_Vehiculos.Controllers
         }
 
         // POST: AlquilersModel/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FechaAlquiler,Codigo_Alquiler,Total_Alquiler,ClienteModelId,VehiculoModelId,Id,Create_At,Update_At,isDelete")] AlquilerModel alquilerModel)
         {
             if (ModelState.IsValid)
             {
+                // Solo guardar el alquiler con un solo vehículo
+                var vehiculo = await _context.Vehiculos.FindAsync(alquilerModel.VehiculoModelId);
+                if (vehiculo != null)
+                {
+                    alquilerModel.Total_Alquiler = vehiculo.Precio_Diario;
+                    alquilerModel.Codigo_Alquiler = Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
+                    if (alquilerModel.FechaAlquiler == DateTime.MinValue)
+                        alquilerModel.FechaAlquiler = DateTime.Now;
+                }
                 _context.Add(alquilerModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -91,8 +98,6 @@ namespace Alquiler_Vehiculos.Controllers
         }
 
         // POST: AlquilersModel/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("FechaAlquiler,Codigo_Alquiler,Total_Alquiler,ClienteModelId,VehiculoModelId,Id,Create_At,Update_At,isDelete")] AlquilerModel alquilerModel)
@@ -106,6 +111,13 @@ namespace Alquiler_Vehiculos.Controllers
             {
                 try
                 {
+                    // Recalcular el total en caso de que se cambie el vehículo
+                    var vehiculo = await _context.Vehiculos.FindAsync(alquilerModel.VehiculoModelId);
+                    if (vehiculo != null)
+                    {
+                        alquilerModel.Total_Alquiler = vehiculo.Precio_Diario;
+                    }
+
                     _context.Update(alquilerModel);
                     await _context.SaveChangesAsync();
                 }

@@ -9,22 +9,36 @@ namespace Alquiler_Vehiculos.Models.Entity
     public class VehiculosAlquiladosModel:BaseModel
     {
         [Required]
-        public int VehiculosModelId { get; set; }
-        public VehiculoModel VehiculosModel { get; set; }
-
         public string Nombre { get; set; }
 
         [Required]
-        public double Precio { get; set; }
-        [Required]
         public int Cantidad { get; set; }
+
         [Required]
         public double Monto { get; set; }
 
-        [Display(Name = "Alquiler")]
+        public DateTime Create_At { get; set; } = DateTime.Now;
+        public DateTime? Update_At { get; set; }
+        public bool isDelete { get; set; } = false;
+
+        [Required]
+        [Display(Name = "Días de Alquiler")]
+        public int Dias { get; set; }
+
+        [Required]
+        [Display(Name = "Precio por Día")]
+        public double Precio { get; set; }
+
+        [Required]
+        [Display(Name = "Subtotal")]
+        public double Subtotal { get; set; }
+
         [ForeignKey("AlquilerModel")]
         public int AlquilerModelId { get; set; }
-        [JsonIgnore]
         public AlquilerModel AlquilerModel { get; set; }
+
+        [ForeignKey("VehiculoModel")]
+        public int VehiculoModelId { get; set; }
+        public VehiculoModel VehiculoModel { get; set; }
     }
 }

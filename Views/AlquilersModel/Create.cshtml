@@ -8,49 +8,46 @@
 <h2 class="mb-4 text-primary">Nuevo Alquiler</h2>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
 
+        <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-            <!-- Selección Cliente -->
             <div class="mb-3">
                 <label asp-for="ClienteModelId" class="form-label fw-bold"></label>
-                <select asp-for="ClienteModelId" class="form-select" asp-items="ViewBag.ClienteModelId" onchange="unCliente()">
+                <select asp-for="ClienteModelId" class="form-select" asp-items="ViewBag.ClienteModelId" id="ClienteModelId" onchange="unCliente()">
                     <option value="">Seleccione un Cliente</option>
                 </select>
                 <span asp-validation-for="ClienteModelId" class="text-danger"></span>
             </div>
 
-            <!-- Datos del Cliente seleccionados -->
             <div class="mb-3">
                 <label class="form-label fw-bold">Licencia</label>
                 <input id="Licencia" class="form-control" readonly />
             </div>
-
             <div class="mb-3">
                 <label class="form-label fw-bold">Teléfono</label>
                 <input id="Telefono" class="form-control" readonly />
             </div>
 
-            <!-- Selección Vehículo -->
-            <div class="mb-3">
-                <label asp-for="VehiculoModelId" class="form-label fw-bold"></label>
-                <select asp-for="VehiculoModelId" class="form-select" asp-items="ViewBag.VehiculoModelId" id="VehiculoModelId" onchange="unVehiculo()">
-                    <option value="">Seleccione un Vehículo</option>
-                </select>
-                <span asp-validation-for="VehiculoModelId" class="text-danger"></span>
-            </div>
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalVehiculos" onclick="Lista_Vehiculos()">
+                + Agregar Vehículo
+            </button>
 
-            <!-- Datos del Vehículo seleccionados -->
-            <div class="mb-3">
-                <label class="form-label fw-bold">Año</label>
-                <input id="Anio" class="form-control" readonly />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-bold">Disponible</label>
-                <input id="Disponible" class="form-control" readonly />
-            </div>
+            <h4>Vehículos Seleccionados</h4>
+            <table id="vehiculosTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Vehículo</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Días</th>
+                        <th>Total</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
 
             <div class="mb-3">
                 <label asp-for="FechaAlquiler" class="form-label fw-bold"></label>
@@ -66,34 +63,133 @@
 
             <div class="mb-3">
                 <label asp-for="Total_Alquiler" class="form-label fw-bold"></label>
-                <input asp-for="Total_Alquiler" class="form-control" />
+                <input asp-for="Total_Alquiler" class="form-control" readonly id="Total_Alquiler" />
                 <span asp-validation-for="Total_Alquiler" class="text-danger"></span>
             </div>
 
-            <div class="form-check mb-3">
-                <input class="form-check-input" asp-for="isDelete" />
-                <label class="form-check-label fw-bold">
-                    @Html.DisplayNameFor(model => model.isDelete)
-                </label>
+            <div class="d-grid mb-3">
+                <input type="submit" value="Guardar Alquiler" class="btn btn-success btn-lg" />
             </div>
+        </form>
 
-            <div class="d-grid">
-                <input type="submit" value="Guardar" class="btn btn-success btn-lg" />
+        <a asp-action="Index" class="btn btn-outline-secondary">Volver a la lista</a>
+
+    </div>
+</div>
+
+<div class="modal fade" id="modalVehiculos" tabindex="-1" aria-labelledby="modalVehiculosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Vehículos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-
-        <button type="button" id="addProduct" class="btn-add"
-                data-bs-toggle="modal" data-bs-target="#modalProductos"
-                onclick="Lista_Productos()">
-            + Agregar Producto
-        </button>
-
-        <!-- Botón de enviar -->
-        <div class="form-group">
-            <button onclick="crear_venta()" class="btn-submit">Guardar Venta</button>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Marca y Modelo</th>
+                            <th>Año</th>
+                            <th>Cantidad</th>
+                            <th>Días</th>
+                            <th>Agregar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="Lista_prodcutos"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="mt-3">
-    <a asp-action="Index" class="btn btn-outline-secondary">Volver a la lista</a>
-</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        var unCliente = () => {
+            var clienteId = $("#ClienteModelId").val();
+            if (!clienteId) return;
+
+            $.get(`/api/ClientesModelApi/${clienteId}`, (uncliente) => {
+                $("#Licencia").val(uncliente.licencia);
+                $("#Telefono").val(uncliente.telefono);
+            });
+        }
+
+
+        var Lista_Vehiculos = () => {
+            $.get(`/api/VehiculosModelApi`, (listavehiculos) => {
+                let html = "";
+                $.each(listavehiculos, (index, vehiculo) => {
+                    let precioDiario = vehiculo.Precio_Diario ?? vehiculo.precio_Diario ?? vehiculo.precio ?? 0;
+                    html += `<tr>
+                        <td>${vehiculo.marca} ${vehiculo.modelo}</td>
+                        <td>${vehiculo.anio}</td>
+                        <td><input type='number' min="1" value="1" id="qty_${vehiculo.id}" class="form-control"/></td>
+                        <td><input type='number' min="1" value="1" id="dias_${vehiculo.id}" class="form-control"/></td>
+                        <td>
+                            <button type="button"
+                                data-id="${vehiculo.id}"
+                                data-nombre="${vehiculo.marca} ${vehiculo.modelo}"
+                                data-precio="${precioDiario}"
+                                onclick="cargarVehiculo(this)"
+                                class="btn btn-success">+</button>
+                        </td>
+                    </tr>`;
+                });
+                $("#Lista_prodcutos").html(html);
+            });
+        }
+
+        var cargarVehiculo = (btn) => {
+            let id = $(btn).data("id");
+            let nombre = $(btn).data("nombre");
+            let precio = parseFloat($(btn).data("precio"));
+            let cantidad = parseInt($(`#qty_${id}`).val());
+            let dias = parseInt($(`#dias_${id}`).val());
+
+            if (cantidad <= 0 || dias <= 0) return;
+
+            if ($(`#fila_${id}`).length > 0) {
+                let currentQty = parseInt($(`#fila_${id} td:eq(2)`).text());
+                let currentDias = parseInt($(`#fila_${id} td:eq(3)`).text());
+                let newQty = currentQty + cantidad;
+                let newDias = currentDias + dias;
+                $(`#fila_${id} td:eq(2)`).text(newQty);
+                $(`#fila_${id} td:eq(3)`).text(newDias);
+                $(`#fila_${id} td:eq(4)`).text((newQty * newDias * precio).toFixed(2));
+            } else {
+                let fila = `<tr id="fila_${id}">
+                    <td>${nombre}</td>
+                    <td>${precio}</td>
+                    <td>${cantidad}</td>
+                    <td>${dias}</td>
+                    <td>${(precio * cantidad * dias).toFixed(2)}</td>
+                    <td><button type="button" class="btn btn-danger" onclick="removerVehiculo(${id})">X</button></td>
+                </tr>`;
+                $("#vehiculosTable tbody").append(fila);
+            }
+
+            actualizarTotal();
+        }
+
+        var removerVehiculo = (id) => {
+            $(`#fila_${id}`).remove();
+            actualizarTotal();
+        }
+
+        var actualizarTotal = () => {
+            let total = 0;
+            $("#vehiculosTable tbody tr").each(function() {
+                total += parseFloat($(this).find("td:eq(4)").text());
+            });
+            $("#Total_Alquiler").val(total.toFixed(2));
+        }
+    </script>
+}

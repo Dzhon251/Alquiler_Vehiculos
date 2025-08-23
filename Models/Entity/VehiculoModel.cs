@@ -15,5 +15,8 @@ namespace Alquiler_Vehiculos.Models.Entity
         public string Anio { get; set; }
         [Required(ErrorMessage = "El campo es requerido")]
         public string Disponible { get; set; }
+        [Required(ErrorMessage = "El precio diario es requerido")]
+        [Display(Name = "Precio Diario")]
+        public double Precio_Diario { get; set; }
     }
 }

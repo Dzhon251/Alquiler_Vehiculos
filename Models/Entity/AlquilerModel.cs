@@ -21,11 +21,5 @@ namespace Alquiler_Vehiculos.Models.Entity
         [ForeignKey("VehiculoModel")]
         public int VehiculoModelId { get; set; }
         public VehiculoModel VehiculoModel { get; set; }
-        public ICollection<VehiculosAlquiladosModel> Vehiculos_Alquilados { get; set; }
-
-        public AlquilerModel()
-        {
-            Vehiculos_Alquilados = new List<VehiculosAlquiladosModel>();
-        }
     }
 }
