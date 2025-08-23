@@ -54,7 +54,7 @@ namespace Alquiler_Vehiculos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Marca,Modelo,Anio,Disponible,Id,Create_At,Update_At,isDelete")] VehiculoModel vehiculoModel)
+        public async Task<IActionResult> Create([Bind("Marca,Modelo,Anio,Disponible,Precio_Diario,Id,Create_At,Update_At,isDelete")] VehiculoModel vehiculoModel)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace Alquiler_Vehiculos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Marca,Modelo,Anio,Disponible,Id,Create_At,Update_At,isDelete")] VehiculoModel vehiculoModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Marca,Modelo,Anio,Disponible,Precio_Diario,Id,Create_At,Update_At,isDelete")] VehiculoModel vehiculoModel)
         {
             if (id != vehiculoModel.Id)
             {

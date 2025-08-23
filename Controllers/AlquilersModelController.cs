@@ -51,7 +51,19 @@ namespace Alquiler_Vehiculos.Controllers
         {
             ViewData["ClienteModelId"] = new SelectList(_context.Clientes.Select(c => new { c.Id, NombreCompleto = c.Nombre + " " + c.Apellido }), "Id", "NombreCompleto");
             ViewData["VehiculoModelId"] = new SelectList(_context.Vehiculos.Select(v => new { v.Id, MarcaModelo = v.Marca + " " + v.Modelo }), "Id", "MarcaModelo");
-            return View();
+            int ultimoId = _context.Alquilados
+                        .OrderByDescending(a => a.Id)
+                        .Select(a => a.Id)
+                        .FirstOrDefault();
+            string codigo = (ultimoId + 1).ToString("D5");
+
+            var model = new AlquilerModel
+            {
+                Codigo_Alquiler = codigo,
+                FechaAlquiler = DateTime.Now
+            };
+
+            return View(model);
         }
 
         // POST: AlquilersModel/Create
