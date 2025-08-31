@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Alquiler_Vehiculos.Models;
 using Alquiler_Vehiculos.Models.Entity;
+using Alquiler_Vehiculos.Models.ViewModel;
 
 namespace Alquiler_Vehiculos.Data
 {
@@ -12,5 +13,6 @@ namespace Alquiler_Vehiculos.Data
         public DbSet<VehiculoModel> Vehiculos { get; set; }
         public DbSet<VehiculosAlquiladosModel> VehiculosAlquilados { get; set; }
         public DbSet<AlquilerModel> Alquilados { get; set; }
+        public DbSet<DashboardViewModel> Dashboards { get; set; }
     }
 }
